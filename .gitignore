@@ -16,3 +16,20 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 .idea
+
+# Scala stuff
+*.class
+**/target/
+
+# IDE
+/.idea
+*.iml
+/.metals
+
+# MacOS
+.DS_Store
+
+.bsp/
+.vscode/
+.bloop/
+*metals.sbt
