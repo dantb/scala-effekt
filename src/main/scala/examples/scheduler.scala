@@ -42,8 +42,10 @@ object scheduler extends App {
 
     def exit() = scope { resume => pure(()) }
 
-    def fork() = scope { resume =>
-      ps.update { resume(true) :: resume(false) :: _ } andThen run
+    def fork(): Boolean / effect = scope.switch { (resume: Boolean => Unit / (state.effect & E)) =>
+      val thing: Unit / state.effect = ps.update { resume(true) :: resume(false) :: _ }
+      val thing2: Unit / (state.effect & E) = thing andThen run
+      thing2
     }
 
     def suspend() = scope { resume =>

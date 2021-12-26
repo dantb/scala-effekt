@@ -13,7 +13,7 @@ object extensibility extends App {
   trait Maybe[R, E] extends Exc {
     val scope: Scope[Option[R], E]
     type effect = scope.effect
-    def raise(msg: String) = scope.switch { resume => pure(None) }
+    def raise(msg: String): Control[Nothing, effect] = scope.switch[Nothing] { resume => pure(Option.empty[R]) }
   }
 
   trait Collect[R, E] extends Amb {

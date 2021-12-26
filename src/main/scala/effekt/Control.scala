@@ -75,6 +75,20 @@ final class Error(t: Throwable) extends Control[Nothing, Pure] {
   override def flatMap[B, E](f: Nothing => B / E): B / (E & Pure) = this.asInstanceOf[B / Pure]
 }
 
+trait Applicative[F[_]]:
+  def pure[A](x: A): F[A]
+  def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+
+object Applicative:
+  
+  given [E]: Applicative[[A] =>> Control[A, E]] = new:
+    def pure[A](x: A): Control[A, E] = effekt.pure(x)
+    def ap[A, B](ff: Control[A => B, E])(fa: Control[A, E]): Control[B, E] = 
+      ff.flatMap { f =>
+        fa.map { a =>
+          f(a)
+        }
+      }
 
 object Control {
 
